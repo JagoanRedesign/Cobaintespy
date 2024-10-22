@@ -31,11 +31,11 @@ def extract_content(html, class_name):
     match = regex.search(html)
     return match.group(1).strip() if match else 'Tidak ada'
 
-def send_notification(issuer_content, title_content):
+def send_notification(issuer_content, title_new):
     message = (f"<b>New Token Alert</b>\n"
-               f"<b>📈 {title_content}</b>\n"
+               f"<b>📈 {title_new}</b>\n"
                f"<code>{issuer_content}</code>\n"
-               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_content}-{issuer_content}'>Buy with First Ledger</a></b>")
+               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
     print(message)  # Hanya untuk demonstrasi
 
 def monitor_tokens():
@@ -54,11 +54,12 @@ def monitor_tokens():
             title_content = extract_content(html, 'title')
 
             # Hapus karakter khusus dari title_content
-            title_content = title_content.replace('$<!-- -->', '')
+            title_new = re.sub(r'<!-- -->|\$', '', title_content)
+
 
             # Hanya lanjut jika ada perubahan dan hasil bukan 'Tidak ada'
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
-                send_notification(issuer_content, title_content)
+                send_notification(issuer_content, title_new)
                 previous_issuer_content = issuer_content  # Update konten penerbit terakhir
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
