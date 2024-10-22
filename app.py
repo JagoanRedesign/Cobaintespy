@@ -53,6 +53,9 @@ def monitor_tokens():
             issuer_content = extract_content(html, 'issuer')
             title_content = extract_content(html, 'title')
 
+            # Hapus karakter khusus dari title_content
+            title_content = title_content.replace('$<!-- -->', '')
+
             # Hanya lanjut jika ada perubahan dan hasil bukan 'Tidak ada'
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
                 send_notification(issuer_content, title_content)
