@@ -39,12 +39,21 @@ def extract_title_content(title_html):
     return match.group(1).strip() if match else 'Tidak ada'
 
 def send_notification(issuer_content, title_new):
+
+    text_message = (f"<b>New Token Alert</b>\n"
+               f"<b>📈 {title_new}</b>\n"
+               f"<code>{issuer_content}</code>\n"
+               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
+    
+    send_text(-1002448557341, text_message)          
+               
     message = (f"<b>New Token</b>\n"
                f"<b>{title_new}</b>\n"
                f"<code>{issuer_content}</code>\n"
                f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>BUY</a></b>")
    
     # Kirim pesan ke Telegram
+    
     send_telegram_message(message)
 
 def send_telegram_message(message):
@@ -54,6 +63,21 @@ def send_telegram_message(message):
         'text': message,
         'parse_mode': 'HTML'
     }
+    response = requests.post(url, json=payload)
+    if response.status_code != 200:
+        print(f"Failed to send message: {response.text}")
+
+def send_text(chat_id, text):
+    
+    payload = {
+        'chat_id': str(chat_id),
+        'parse_mode': 'HTML',
+        'text': text,
+        'message_thread_id: 26
+    }
+       
+    url = f"https://api.telegram.org/bot7550906536:AAHCsudygDNhTUccm3JpmvqA21Br5WqM1dI/sendMessage"
+
     response = requests.post(url, json=payload)
     if response.status_code != 200:
         print(f"Failed to send message: {response.text}")
