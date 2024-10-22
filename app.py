@@ -31,6 +31,11 @@ def extract_content(html, class_name):
     match = regex.search(html)
     return match.group(1).strip() if match else 'Tidak ada'
 
+def extract_title_content(title_html):
+    # Regex untuk mengambil hanya teks di dalam <div class="title">
+    match = re.search(r'<div class="title">\$(.*?)</div>', title_html)
+    return match.group(1).strip() if match else 'Tidak ada'
+    
 def send_notification(issuer_content, title_new):
     message = (f"<b>New Token Alert</b>\n"
                f"<b>📈 {title_new}</b>\n"
@@ -50,9 +55,8 @@ def monitor_tokens():
             response.raise_for_status()  # Memicu exception jika terjadi kesalahan
             html = response.text
 
-            issuer_content = extract_content(html, 'issuer')
-            title_content = extract_content(html, 'title')
-
+            issuer_content = extract_content(html, 'issuer')            
+            title_content = extract_title_content(html)
             # Hapus karakter khusus dari title_content
             title_new = re.sub(r'<!-- -->|\$', '', title_content)
 
