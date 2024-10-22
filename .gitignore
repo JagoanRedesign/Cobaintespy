@@ -1,0 +1,46 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Virtual environment directories
+venv/
+env/
+ENV/
+.venv/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Database files
+*.sqlite3
+*.db
+
+# Cache files
+*.cache
+*.pyo
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+
+# Pytest cache
+.cache
+
+# Miscellaneous
+*.DS_Store
+*.egg-info/
+dist/
+build/
