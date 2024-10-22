@@ -1,3 +1,4 @@
+import config
 import random
 import requests
 import re
@@ -9,6 +10,9 @@ app = Flask(__name__)
 
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
+
+telegram_bot_token = config.telegram_bot_token  # Ganti dengan token bot Anda
+chat_id = config.chat_id  # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
