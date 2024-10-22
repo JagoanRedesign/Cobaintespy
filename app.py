@@ -88,7 +88,7 @@ def monitor_tokens():
 
 @app.route('/')
 def index():
-    return jsonify({"message": "Token monitoring is running!"})
+    return jsonify({"message": "Bot is running! by @MzCoder"})
 
 if __name__ == "__main__":
     # Jalankan monitoring dalam thread terpisah
