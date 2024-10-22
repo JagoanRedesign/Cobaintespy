@@ -1,4 +1,3 @@
-import config
 import random
 import requests
 import re
@@ -11,8 +10,8 @@ app = Flask(__name__)
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
 
-telegram_bot_token = config.telegram_bot_token  # Ganti dengan token bot Anda
-chat_id = config.chat_id  # Ganti dengan chat ID Anda
+telegram_bot_token = '7260464963:AAFv6FdukbICEi2IYjsHUxRj2zJZJ_xq8hc'  # Ganti dengan token bot Anda
+chat_id = '5806250642'  # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
@@ -81,6 +80,8 @@ def monitor_tokens():
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
                 send_notification(issuer_content, title_new)
                 previous_issuer_content = issuer_content  # Update konten penerbit terakhir
+                print('Sukses Mengkirim:', title_new)
+        
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
