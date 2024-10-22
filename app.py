@@ -9,6 +9,8 @@ app = Flask(__name__)
 
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
+telegram_bot_token = '7260464963:AAFv6FdukbICEi2IYjsHUxRj2zJZJ_xq8hc'  # Ganti dengan token bot Anda
+chat_id = '5806250642'  # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
@@ -32,16 +34,28 @@ def extract_content(html, class_name):
     return match.group(1).strip() if match else 'Tidak ada'
 
 def extract_title_content(title_html):
-    # Regex untuk mengambil hanya teks di dalam <div class="title">
     match = re.search(r'<div class="title">\$(.*?)</div>', title_html)
     return match.group(1).strip() if match else 'Tidak ada'
-    
+
 def send_notification(issuer_content, title_new):
     message = (f"<b>New Token Alert</b>\n"
                f"<b>📈 {title_new}</b>\n"
                f"<code>{issuer_content}</code>\n"
                f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
-    print(message)  # Hanya untuk demonstrasi
+    
+    # Kirim pesan ke Telegram
+    send_telegram_message(message)
+
+def send_telegram_message(message):
+    url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
+    payload = {
+        'chat_id': chat_id,
+        'text': message,
+        'parse_mode': 'HTML'
+    }
+    response = requests.post(url, json=payload)
+    if response.status_code != 200:
+        print(f"Failed to send message: {response.text}")
 
 def monitor_tokens():
     global previous_issuer_content
@@ -57,9 +71,9 @@ def monitor_tokens():
 
             issuer_content = extract_content(html, 'issuer')            
             title_content = extract_title_content(html)
-            # Hapus karakter khusus dari title_content
-            title_new = re.sub(r'<!-- -->|\$', '', title_content)
 
+            # Hapus karakter khusus dari title_content
+            title_new = title_content.replace('$', '').replace('<!-- -->', '')
 
             # Hanya lanjut jika ada perubahan dan hasil bukan 'Tidak ada'
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
