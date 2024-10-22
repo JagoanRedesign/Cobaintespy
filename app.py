@@ -73,7 +73,7 @@ def send_text(chat_id, text):
         'chat_id': str(chat_id),
         'parse_mode': 'HTML',
         'text': text,
-        'message_thread_id: 26
+        'message_thread_id': 26
     }
        
     url = f"https://api.telegram.org/bot7550906536:AAHCsudygDNhTUccm3JpmvqA21Br5WqM1dI/sendMessage"
