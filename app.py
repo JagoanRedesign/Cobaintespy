@@ -10,8 +10,8 @@ app = Flask(__name__)
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
 
-telegram_bot_token = '7260464963:AAFv6FdukbICEi2IYjsHUxRj2zJZJ_xq8hc'  # Ganti dengan token bot Anda
-chat_id = '5806250642'  # Ganti dengan chat ID Anda
+telegram_bot_token = '6175245250:AAHj02EKQhnU4_r5SQK_JGvQM-p5fbmISXQ'  # Ganti dengan token bot Anda
+chat_id = '-1002417353710'  # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
@@ -39,11 +39,11 @@ def extract_title_content(title_html):
     return match.group(1).strip() if match else 'Tidak ada'
 
 def send_notification(issuer_content, title_new):
-    message = (f"<b>New Token Alert</b>\n"
-               f"<b>📈 {title_new}</b>\n"
+    message = (f"<b>New Token</b>\n"
+               f"<b>{title_new}</b>\n"
                f"<code>{issuer_content}</code>\n"
-               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
-    
+               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>BUY</a></b>")
+   
     # Kirim pesan ke Telegram
     send_telegram_message(message)
 
