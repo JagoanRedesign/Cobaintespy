@@ -109,7 +109,7 @@ def monitor_tokens():
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
-        time.sleep(1)  # Tunggu 10 detik sebelum melakukan permintaan lagi
+        time.sleep(2)  # Tunggu 10 detik sebelum melakukan permintaan lagi
 
 @app.route('/')
 def index():
