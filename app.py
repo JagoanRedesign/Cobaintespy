@@ -9,8 +9,6 @@ app = Flask(__name__)
 
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
-telegram_bot_token = '7260464963:AAFv6FdukbICEi2IYjsHUxRj2zJZJ_xq8hc'  # Ganti dengan token bot Anda
-chat_id = '5806250642'  # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
@@ -82,7 +80,7 @@ def monitor_tokens():
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
-        time.sleep(10)  # Tunggu 10 detik sebelum melakukan permintaan lagi
+        time.sleep(1)  # Tunggu 10 detik sebelum melakukan permintaan lagi
 
 @app.route('/')
 def index():
