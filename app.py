@@ -47,14 +47,14 @@ def send_notification(issuer_content, title_new):
     
     send_text(-1002448557341, text_message)          
                
-    message = (f"<b>New Token</b>\n"
-               f"<b>{title_new}</b>\n"
-               f"<code>{issuer_content}</code>\n"
-               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>BUY</a></b>")
+    #message = (f"<b>New Token</b>\n"
+              # f"<b>{title_new}</b>\n"
+               #f"<code>{issuer_content}</code>\n"
+               #f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>BUY</a></b>")
    
     # Kirim pesan ke Telegram
     
-    send_telegram_message(message)
+    #send_telegram_message(message)
 
 def send_telegram_message(message):
     url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
@@ -109,7 +109,7 @@ def monitor_tokens():
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
-        time.sleep(2)  # Tunggu 10 detik sebelum melakukan permintaan lagi
+        time.sleep(2.5)  # Tunggu 10 detik sebelum melakukan permintaan lagi
 
 @app.route('/')
 def index():
