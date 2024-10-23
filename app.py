@@ -104,12 +104,12 @@ def monitor_tokens():
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
                 send_notification(issuer_content, title_new)
                 previous_issuer_content = issuer_content  # Update konten penerbit terakhir
-                print('Sukses Mengkirim:', title_new)
+                print('Sukses Mengirim:', title_new)
         
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
-        time.sleep(2.5)  # Tunggu 10 detik sebelum melakukan permintaan lagi
+        time.sleep(3)  # Tunggu 10 detik sebelum melakukan permintaan lagi
 
 @app.route('/')
 def index():
