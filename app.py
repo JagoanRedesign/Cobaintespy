@@ -4,14 +4,15 @@ import re
 from flask import Flask, jsonify
 import threading
 import time
+import cloudscraper  # Import cloudscraper
 
 app = Flask(__name__)
 
 # Variabel global untuk menyimpan konten penerbit terakhir
 previous_issuer_content = 'Tidak ada'
 
-telegram_bot_token = '6175245250:AAHj02EKQhnU4_r5SQK_JGvQM-p5fbmISXQ'  # Ganti dengan token bot Anda
-chat_id = '-1002417353710'  # Ganti dengan chat ID Anda
+telegram_bot_token = '7550906536:AAHCsudygDNhTUccm3JpmvqA21Br5WqM1dI'  # Ganti dengan token bot Anda
+chat_id = '-1002417353710' # Ganti dengan chat ID Anda
 
 def generate_random_ip():
     return f"{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
@@ -39,44 +40,22 @@ def extract_title_content(title_html):
     return match.group(1).strip() if match else 'Tidak ada'
 
 def send_notification(issuer_content, title_new):
-
     text_message = (f"<b>New Token Alert</b>\n"
-               f"<b>📈 {title_new}</b>\n"
-               f"<code>{issuer_content}</code>\n"
-               f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
+                    f"<b>📈 {title_new}</b>\n"
+                    f"<code>{issuer_content}</code>\n"
+                    f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>Buy with First Ledger</a></b>")
     
-    send_text(-1002448557341, text_message)          
-               
-    #message = (f"<b>New Token</b>\n"
-              # f"<b>{title_new}</b>\n"
-               #f"<code>{issuer_content}</code>\n"
-               #f"<b><a href='https://t.me/firstledger_bot?start=FLDEEPLINK_{title_new}-{issuer_content}'>BUY</a></b>")
-   
-    # Kirim pesan ke Telegram
-    
-    #send_telegram_message(message)
-
-def send_telegram_message(message):
-    url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
-    payload = {
-        'chat_id': chat_id,
-        'text': message,
-        'parse_mode': 'HTML'
-    }
-    response = requests.post(url, json=payload)
-    if response.status_code != 200:
-        print(f"Failed to send message: {response.text}")
+    send_text(chat_id, text_message)
 
 def send_text(chat_id, text):
-    
     payload = {
         'chat_id': str(chat_id),
         'parse_mode': 'HTML',
         'text': text,
         'message_thread_id': 26
     }
-       
-    url = f"https://api.telegram.org/bot7550906536:AAHCsudygDNhTUccm3JpmvqA21Br5WqM1dI/sendMessage"
+    
+    url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
 
     response = requests.post(url, json=payload)
     if response.status_code != 200:
@@ -85,37 +64,33 @@ def send_text(chat_id, text):
 def monitor_tokens():
     global previous_issuer_content
     url = 'https://firstledger.net/tokens'
-    session = requests.Session()
+    scraper = cloudscraper.create_scraper()  # Menggunakan cloudscraper
 
     while True:
-        session.headers['User-Agent'] = generate_random_user_agent()  # Atur User-Agent untuk setiap permintaan
         try:
-            response = session.get(url)
+            response = scraper.get(url)
             response.raise_for_status()  # Memicu exception jika terjadi kesalahan
             html = response.text
 
             issuer_content = extract_content(html, 'issuer')            
             title_content = extract_title_content(html)
 
-            # Hapus karakter khusus dari title_content
             title_new = title_content.replace('$', '').replace('<!-- -->', '')
 
-            # Hanya lanjut jika ada perubahan dan hasil bukan 'Tidak ada'
             if issuer_content != previous_issuer_content and issuer_content != 'Tidak ada':
                 send_notification(issuer_content, title_new)
-                previous_issuer_content = issuer_content  # Update konten penerbit terakhir
+                previous_issuer_content = issuer_content
                 print('Sukses Mengirim:', title_new)
         
         except requests.RequestException as error:
             print('Error fetching or processing data:', error)
 
-        time.sleep(3)  # Tunggu 10 detik sebelum melakukan permintaan lagi
+        time.sleep(10)  # Tunggu 10 detik sebelum melakukan permintaan lagi
 
 @app.route('/')
 def index():
     return jsonify({"message": "Bot is running! by @MzCoder"})
 
 if __name__ == "__main__":
-    # Jalankan monitoring dalam thread terpisah
     threading.Thread(target=monitor_tokens, daemon=True).start()
     app.run(host='0.0.0.0', port=8000)
